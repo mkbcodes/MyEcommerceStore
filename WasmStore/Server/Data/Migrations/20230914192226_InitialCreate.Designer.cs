@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WasmStore.Server.Data;
 
@@ -11,9 +12,10 @@ using WasmStore.Server.Data;
 namespace WasmStore.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230914192226_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -491,20 +493,6 @@ namespace WasmStore.Server.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Description1",
-                            Name = "Category1"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Description2",
-                            Name = "Category2"
-                        });
                 });
 
             modelBuilder.Entity("WasmStore.Shared.Favourite", b =>
@@ -680,38 +668,6 @@ namespace WasmStore.Server.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            Description = "Elevate your living space with our ethereal Woven Wall Hanging in Macrame! Meticulously handcrafted by skilled artisans, this wall hanging is the epitome of bohemian elegance. Featuring intricate patterns and soft, earthy hues, our macrame wall hanging effortlessly adds texture and charm to any room. Made from 100% premium cotton, it's not just an art piece but a testament to craftsmanship and sustainability.",
-                            ImageUrl = "https://garrettmuseumofart.org/wp-content/uploads/2016/03/placeholder_template.jpg",
-                            Name = "Woven Wall Hanging",
-                            Price = 9.99m,
-                            StockQuantity = 10
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 2,
-                            Description = "Never confuse your basil with your parsley again with our delightful Vegetable Garden Markers! These charming ornaments are designed to bring both flair and functionality to your vegetable garden. Each marker features a beautifully crafted, weather-resistant design that not only labels your plants but also adds a whimsical touch to your garden.",
-                            ImageUrl = "https://garrettmuseumofart.org/wp-content/uploads/2016/03/placeholder_template.jpg",
-                            Name = "Vegetable Garden Marker",
-                            Price = 9.99m,
-                            StockQuantity = 10
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 2,
-                            Description = "Add a dash of romance and elegance to your special day with our Wedding Wall Accent in Embroidery and Decorative elements. This exquisite wall art piece is a perfect backdrop for wedding photos or a focal point in the wedding venue. Created with intricate embroidery work and delicate decorative embellishments, this wall accent captures the essence of love and union in its design.",
-                            ImageUrl = "https://garrettmuseumofart.org/wp-content/uploads/2016/03/placeholder_template.jpg",
-                            Name = "Wall Accent",
-                            Price = 9.99m,
-                            StockQuantity = 10
-                        });
                 });
 
             modelBuilder.Entity("WasmStore.Shared.ProductTag", b =>
