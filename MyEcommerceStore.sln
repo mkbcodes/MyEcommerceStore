@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasmStore.Server", "WasmStore\Server\WasmStore.Server.csproj", "{F7D20A2E-406C-4C79-BC44-572C7ADF7A04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WasmStore.Server", "WasmStore\Server\WasmStore.Server.csproj", "{F7D20A2E-406C-4C79-BC44-572C7ADF7A04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasmStore.Client", "WasmStore\Client\WasmStore.Client.csproj", "{C233E8FE-6319-4FC6-B698-030513D04CF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WasmStore.Client", "WasmStore\Client\WasmStore.Client.csproj", "{C233E8FE-6319-4FC6-B698-030513D04CF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasmStore.Shared", "WasmStore\Shared\WasmStore.Shared.csproj", "{4A6F82E2-8713-402A-8189-DCF0D61B7E54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WasmStore.Shared", "WasmStore\Shared\WasmStore.Shared.csproj", "{4A6F82E2-8713-402A-8189-DCF0D61B7E54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

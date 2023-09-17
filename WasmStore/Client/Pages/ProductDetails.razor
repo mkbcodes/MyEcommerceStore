@@ -1,0 +1,56 @@
+﻿@page "/product/{id:int}"
+@using WasmStore.Shared;
+@inject IProductService ProductService;
+<h3>ProductDetails</h3>
+
+@if(product == null)
+{
+    <span>Loading Product...</span>
+} else
+{
+    <div class="media">
+        <div class="media-img-wrapper me-2">
+            <img class="media-img" src="@product.ImageUrl" alt="@product.Name" />
+            <div class="small-img-container">
+                <img class="small-img" src="@product.ImageUrl" alt="Small Image 1" />
+                <img class="small-img" src="@product.ImageUrl" alt="Small Image 2" />
+                <img class="small-img" src="@product.ImageUrl" alt="Small Image 3" />
+                <img class="small-img" src="@product.ImageUrl" alt="Small Image 2" />
+                <img class="small-img" src="@product.ImageUrl" alt="Small Image 3" />
+                <img class="small-img" src="@product.ImageUrl" alt="Small Image 3" />
+                <!-- Add more small images here -->
+            </div>
+        </div>
+        <div class="media-body">
+            <h2 class="mb-0">@product.Name</h2>
+            <p>@product.Description</p>
+            <h4 class="price">
+                $@product.Price
+            </h4>
+        </div>
+    </div>
+}
+
+
+@code {
+    private Product? product = null;
+    public string message;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnParametersSetAsync() {
+        message = "Your Product Loading...";
+        var result = await ProductService.GetProduct(Id);
+        if(!result.Success)
+        {
+            message = result.Message;
+        }
+
+        else
+        {
+            product = result.Data;
+        }
+
+    }
+}
