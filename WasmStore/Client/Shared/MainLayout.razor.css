@@ -5,7 +5,7 @@
 }
 
 main {
-    flex: 1;
+    flex: 1; /* take up full remaining space in flex container, without this potentionally there would be unused space in the page container*/
 }
 
 .sidebar {

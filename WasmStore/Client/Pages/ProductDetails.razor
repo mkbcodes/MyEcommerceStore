@@ -8,16 +8,22 @@
     <span>Loading Product...</span>
 } else
 {
+    @if (product.Image != null)
+    {
+        var base64Image = Convert.ToBase64String(product.Image);
+        imageSrc = $"data:image/jpeg;base64,{base64Image}";
+    }
     <div class="media">
         <div class="media-img-wrapper me-2">
-            <img class="media-img" src="@product.ImageUrl" alt="@product.Name" />
+            <img class="media-img" src="@imageSrc" alt="@product.Name" />
             <div class="small-img-container">
-                <img class="small-img" src="@product.ImageUrl" alt="Small Image 1" />
-                <img class="small-img" src="@product.ImageUrl" alt="Small Image 2" />
-                <img class="small-img" src="@product.ImageUrl" alt="Small Image 3" />
-                <img class="small-img" src="@product.ImageUrl" alt="Small Image 2" />
-                <img class="small-img" src="@product.ImageUrl" alt="Small Image 3" />
-                <img class="small-img" src="@product.ImageUrl" alt="Small Image 3" />
+
+                <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 1" />
+                <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 2" />
+                <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 3" />
+                <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 2" />
+                <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 3" />
+                <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 3" />
                 <!-- Add more small images here -->
             </div>
         </div>
@@ -33,6 +39,7 @@
 
 
 @code {
+    string imageSrc = "/images/img_placeholder.jpg";
     private Product? product = null;
     public string message;
 

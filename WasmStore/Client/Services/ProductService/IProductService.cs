@@ -11,6 +11,6 @@ namespace WasmStore.Client.Services.ProductService
         Product Product { get; set; }
         Task GetProducts();
         Task<ServiceResponse<Product>> GetProduct(int productId);
-        Task PostProduct(Product product);
+        Task<ServiceResponse<Product>> PostProduct(Product product);
     }
 }

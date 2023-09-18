@@ -3,6 +3,9 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+app {
+    
+}
 
 h1:focus {
     outline: none;
@@ -32,6 +35,14 @@ a, .btn-link {
 
 .validation-message {
     color: red;
+}
+.media {
+    display: flex;
+    align-items: flex-start;
+}
+
+.media-body {
+    flex: 1;
 }
 
 #blazor-error-ui {

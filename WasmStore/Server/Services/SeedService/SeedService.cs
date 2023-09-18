@@ -8,11 +8,13 @@ namespace WasmStore.Server.Services.SeedService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public SeedService(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public SeedService(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public async Task SeedRolesAsync()
@@ -46,9 +48,44 @@ namespace WasmStore.Server.Services.SeedService
             }
         }
 
-        public async Task SeedPlaceholderDataAsync()
+        public async Task SeedPlaceholderProductDataAsync()
         {
-            //
+            
+            // Create placeholder products
+            var products = new[]
+            {
+                new Product
+                {
+                    Name = "Woven Wall Hanging",
+                    Description = "Elevate your living space with our ethereal Woven Wall Hanging in Macrame! Meticulously handcrafted by skilled artisans, this wall hanging is the epitome of bohemian elegance. Featuring intricate patterns and soft, earthy hues, our macrame wall hanging effortlessly adds texture and charm to any room. Made from 100% premium cotton, it's not just an art piece but a testament to craftsmanship and sustainability.",
+                    Price = 9.99m,
+                    CategoryId = 1,
+                    StockQuantity = 10
+                },
+                new Product
+                {
+                    
+                    Name = "Vegetable Garden Marker",
+                    Description = "Never confuse your basil with your parsley again with our delightful Vegetable Garden Markers! These charming ornaments are designed to bring both flair and functionality to your vegetable garden. Each marker features a beautifully crafted, weather-resistant design that not only labels your plants but also adds a whimsical touch to your garden.",
+                    Price = 9.99m,
+                    CategoryId = 2, // Set the appropriate CategoryId
+                    StockQuantity = 10
+                },
+                new Product
+                {
+                    
+                    Name = "Wall Accent",
+                    Description = "Add a dash of romance and elegance to your special day with our Wedding Wall Accent in Embroidery and Decorative elements. This exquisite wall art piece is a perfect backdrop for wedding photos or a focal point in the wedding venue. Created with intricate embroidery work and delicate decorative embellishments, this wall accent captures the essence of love and union in its design.",
+                    Price = 9.99m,
+                    CategoryId = 2, // Set the appropriate CategoryId
+                    StockQuantity = 10
+                }
+            };
+            
+
+            // Add products to DbContext
+            await _context.Products.AddRangeAsync(products);
+            await _context.SaveChangesAsync();
         }
         // Implement other seed methods as needed
     }

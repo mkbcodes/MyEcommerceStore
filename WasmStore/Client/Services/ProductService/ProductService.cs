@@ -17,7 +17,7 @@ namespace WasmStore.Client.Services.ProductService
         {
            
         }*/
-        public async Task PostProduct(Product product)
+        public async Task<ServiceResponse<Product>> PostProduct(Product product)
         {
             // Use PostAsJsonAsync to send the product object as JSON in the request body
             var response = await _http.PostAsJsonAsync("api/product", product);
@@ -30,7 +30,8 @@ namespace WasmStore.Client.Services.ProductService
             {
                 Product = result.Data;
             }
-           
+            return result;
+
         }
 
 

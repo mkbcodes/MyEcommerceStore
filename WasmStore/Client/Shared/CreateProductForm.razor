@@ -1,0 +1,89 @@
+﻿@using WasmStore.Shared;
+@inject IProductService ProductService
+@* Add authorization stup so only an admin role can view.*@
+<h3>New Product</h3>
+<form @onsubmit="HandleAddProduct">
+    <div class="mb-3 row">
+        <label for="productName" class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-10 col-md-8 col-lg-10 ">
+            <input type="text" class="form-control" id="productName" @bind="NewProduct.Name">
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label for="exampleFormControlTextarea1" class="col-sm-2 col-form-label">Description</label>
+        <div class="col-sm-10 col-md-8 col-lg-10 ">
+            <textarea class="form-control" rows="3" id="exampleFormControlTextarea1" @bind="NewProduct.Description"></textarea>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label for="productPrice" class="col-sm-2 col-form-label">Price</label>
+        <div class="col-sm-10 col-md-8 col-lg-10 ">
+            <input type="number" class="form-control" id="productPrice" @bind="NewProduct.Price">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="productStock" class="col-sm-2 col-form-label">Stock</label>
+        <div class="col-sm-10 col-md-8 col-lg-10 ">
+            <input type="number" class="form-control" id="productStock" @bind="NewProduct.StockQuantity">
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="productImage" class="form-label">Image</label>
+        <InputFile id="productImage" OnChange="@OnImageUpload" class="form-control" />
+    </div>
+
+
+    @* Render here a category with checkboxes once category service is created.*@
+    <div>
+        <label>Category ID:</label>
+        <input type="number" @bind="NewProduct.CategoryId" />
+    </div>
+
+
+    <div>
+        <button class="btn btn-primary" type="submit">Add Product</button>
+    </div>
+</form>
+<div>
+    <span>@responseMessage</span>
+</div>
+
+
+@code {
+    private string responseMessage = "";
+
+    private Product NewProduct = new Product();
+
+    private async Task HandleAddProduct()
+    {
+        var response = await ProductService.PostProduct(NewProduct);
+        if (response.Success)
+        {
+            responseMessage = "Product successfully added.";
+            // Optionally, you can reset the NewProduct object here to clear the form
+        }
+        else
+        {
+            responseMessage = $"Failed to add product: {response.Message}";
+        }
+    }
+    private async Task OnImageUpload(InputFileChangeEventArgs e)
+    {
+        var imageFile = e.File;
+        if (imageFile != null)
+        {
+            using var memoryStream = new MemoryStream();
+            await imageFile.OpenReadStream().CopyToAsync(memoryStream);
+            NewProduct.Image = memoryStream.ToArray();
+            responseMessage = "Image uploaded successfully.";
+        }
+        else
+        {
+            responseMessage = "Failed to upload image.";
+        }
+    }
+
+}
