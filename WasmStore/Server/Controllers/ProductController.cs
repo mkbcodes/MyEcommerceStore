@@ -30,10 +30,11 @@ namespace WasmStore.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> CreateProduct(Product product)
+        public async Task<ActionResult<ServiceResponse<ProductDTO>>> CreateProduct(ProductDTO productDto)
         {
-            var result = await _productService.PostProductAsync(product);
+            var result = await _productService.PostProductAsync(productDto);
             return Ok(result);
         }
+
     }
 }
