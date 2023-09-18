@@ -1,11 +1,17 @@
-﻿namespace WasmStore.Server.Services.ProductService
+﻿using AutoMapper;
+
+namespace WasmStore.Server.Services.ProductService
 {
     public class ProductService : IProductService
     {
         private readonly ApplicationDbContext _context;
-        public ProductService(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+
+        public ProductService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
+
         }
 
         public async Task<ServiceResponse<Product>> GetProductAsync(int productId)
@@ -25,13 +31,16 @@
             return response;
         }
 
-        public async Task<ServiceResponse<Product>> PostProductAsync(Product product)
+        public async Task<ServiceResponse<ProductDTO>> PostProductAsync(ProductDTO productDto)
         {
-            var response = new ServiceResponse<Product>();
-            
+            // Map the product to a DTO
+            var product = _mapper.Map<Product>(productDto);
+            var response = new ServiceResponse<ProductDTO>();
+          
             await _context.AddAsync(product);
-            var result = await _context.SaveChangesAsync();
 
+            // Save the product
+            var result = await _context.SaveChangesAsync();
             if (result <= 0)
             {
                 response.Success = false;
@@ -39,11 +48,11 @@
             }
             else
             {
-                response.Data = product;
-                
+                // if successful Map the Product back to a ProductDTO
+                var productDtoOut = _mapper.Map<ProductDTO>(product);
+                response.Data = productDtoOut;
             }
             return response;
-           
         }
 
         public async Task<ServiceResponse<List<Product>>> GetProductsAsync()

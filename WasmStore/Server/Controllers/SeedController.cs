@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WasmStore.Server.Services.SeedService;
-
 namespace WasmStore.Server.Controllers
 {
 

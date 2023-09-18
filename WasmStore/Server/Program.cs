@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using System.Data;
 using WasmStore.Server.Models;
 using WasmStore.Server.Services.SeedService;
-
+using AutoMapper; 
 public class Program
 {
     public static void Main(string[] args)
@@ -46,6 +46,7 @@ public class Program
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
+        builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
         var app = builder.Build();
 
@@ -55,7 +56,7 @@ public class Program
             app.UseMigrationsEndPoint();
             app.UseWebAssemblyDebugging();
             app.UseSwaggerUI();
-            // Initiates a block where services can be retrieved from the app's dependency injection container.
+            // Initiates a code block where services can be retrieved from the app's dependency injection container.
             using var scope = app.Services.CreateScope();
 
             // Retrieves the seed service that implements ISeedService from the scoped services.
@@ -66,6 +67,9 @@ public class Program
 
             // Calls the seed method to add default user and admin temporary accounts for development purposes.
             seeder.SeedDefaultUsersAsync().Wait();
+
+            // Calls the seed method to add products.
+            //seeder.SeedPlaceholderProductDataAsync().Wait();
 
         }
         else

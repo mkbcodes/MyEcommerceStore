@@ -9,6 +9,6 @@ namespace WasmStore.Server.Services.ProductService
     {
         Task<ServiceResponse<List<Product>>> GetProductsAsync();
         Task<ServiceResponse<Product>> GetProductAsync(int productId);
-        Task<ServiceResponse<Product>> PostProductAsync(Product product);
+        Task<ServiceResponse<ProductDTO>> PostProductAsync(ProductDTO productDto);
     }
 }
