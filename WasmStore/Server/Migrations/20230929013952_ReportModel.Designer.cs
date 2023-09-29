@@ -9,17 +9,17 @@ using WasmStore.Server.Data;
 
 #nullable disable
 
-namespace WasmStore.Server.Data.Migrations
+namespace WasmStore.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230917233453_AdjustProduct")]
-    partial class AdjustProduct
+    [Migration("20230929013952_ReportModel")]
+    partial class ReportModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.20")
+                .HasAnnotation("ProductVersion", "6.0.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -302,6 +302,47 @@ namespace WasmStore.Server.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WasmStore.Server.Models.Address", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AddressLine")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PostalCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("WasmStore.Server.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -314,12 +355,26 @@ namespace WasmStore.Server.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -367,102 +422,23 @@ namespace WasmStore.Server.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Address", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.CartItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AddressLine")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Province")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Addresses");
-                });
-
-            modelBuilder.Entity("WasmStore.Shared.AppUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<byte[]>("HashedPassword")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<byte[]>("Salt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppUsers");
-                });
-
-            modelBuilder.Entity("WasmStore.Shared.CartItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .IsRequired()
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Quantity")
-                        .IsRequired()
-                        .HasColumnType("int");
+                    b.Property<Guid>("Quantity")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ShoppingCartId")
-                        .IsRequired()
-                        .HasColumnType("int");
+                    b.Property<Guid>("ShoppingCartId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -473,15 +449,20 @@ namespace WasmStore.Server.Data.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Category", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -497,59 +478,90 @@ namespace WasmStore.Server.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("c46f7870-3851-4a9c-b868-ea3068346749"),
+                            DateCreated = new DateTime(2023, 9, 29, 1, 39, 52, 265, DateTimeKind.Utc).AddTicks(324),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Description1",
-                            Name = "Category1"
+                            Name = "Macrame"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("a6c4719a-cbd3-47d9-b5f3-e5b78a961880"),
+                            DateCreated = new DateTime(2023, 9, 29, 1, 39, 52, 265, DateTimeKind.Utc).AddTicks(328),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Description2",
-                            Name = "Category2"
+                            Name = "Seasonal"
                         });
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Favourite", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Favourite", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("Favourites");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Order", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Image", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<byte[]>("Data")
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("WasmStore.Server.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("Discount")
@@ -571,27 +583,25 @@ namespace WasmStore.Server.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.OrderItem", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.OrderItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -605,13 +615,11 @@ namespace WasmStore.Server.Data.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Payment", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Payment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -619,8 +627,8 @@ namespace WasmStore.Server.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -645,17 +653,20 @@ namespace WasmStore.Server.Data.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Product", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("int");
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -672,8 +683,7 @@ namespace WasmStore.Server.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("StockQuantity")
-                        .IsRequired()
+                    b.Property<int>("StockQuantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -685,8 +695,10 @@ namespace WasmStore.Server.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            CategoryId = 1,
+                            Id = new Guid("471d6cb7-1c12-4163-9759-a7a228d6eb21"),
+                            CategoryId = new Guid("c46f7870-3851-4a9c-b868-ea3068346749"),
+                            DateCreated = new DateTime(2023, 9, 29, 1, 39, 52, 265, DateTimeKind.Utc).AddTicks(472),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Elevate your living space with our ethereal Woven Wall Hanging in Macrame! Meticulously handcrafted by skilled artisans, this wall hanging is the epitome of bohemian elegance. Featuring intricate patterns and soft, earthy hues, our macrame wall hanging effortlessly adds texture and charm to any room. Made from 100% premium cotton, it's not just an art piece but a testament to craftsmanship and sustainability.",
                             Name = "Woven Wall Hanging",
                             Price = 9.99m,
@@ -694,8 +706,10 @@ namespace WasmStore.Server.Data.Migrations
                         },
                         new
                         {
-                            Id = 2,
-                            CategoryId = 2,
+                            Id = new Guid("3caff9fd-da32-4d8e-ae8d-940384d30912"),
+                            CategoryId = new Guid("c46f7870-3851-4a9c-b868-ea3068346749"),
+                            DateCreated = new DateTime(2023, 9, 29, 1, 39, 52, 265, DateTimeKind.Utc).AddTicks(488),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Never confuse your basil with your parsley again with our delightful Vegetable Garden Markers! These charming ornaments are designed to bring both flair and functionality to your vegetable garden. Each marker features a beautifully crafted, weather-resistant design that not only labels your plants but also adds a whimsical touch to your garden.",
                             Name = "Vegetable Garden Marker",
                             Price = 9.99m,
@@ -703,8 +717,10 @@ namespace WasmStore.Server.Data.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            CategoryId = 2,
+                            Id = new Guid("49e8432f-c40f-40f4-a1aa-dbf26848cefa"),
+                            CategoryId = new Guid("a6c4719a-cbd3-47d9-b5f3-e5b78a961880"),
+                            DateCreated = new DateTime(2023, 9, 29, 1, 39, 52, 265, DateTimeKind.Utc).AddTicks(504),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Add a dash of romance and elegance to your special day with our Wedding Wall Accent in Embroidery and Decorative elements. This exquisite wall art piece is a perfect backdrop for wedding photos or a focal point in the wedding venue. Created with intricate embroidery work and delicate decorative embellishments, this wall accent captures the essence of love and union in its design.",
                             Name = "Wall Accent",
                             Price = 9.99m,
@@ -712,16 +728,22 @@ namespace WasmStore.Server.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.ProductTag", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.ProductTag", b =>
                 {
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("TagId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ProductId", "TagId");
 
@@ -730,63 +752,65 @@ namespace WasmStore.Server.Data.Migrations
                     b.ToTable("ProductTags");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Report", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Report", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("AppUserId")
+                    b.Property<string>("ApplicationUserId")
                         .IsRequired()
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Region")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ReportType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<DateTime>("TimePeriodEnd")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("TimePeriod")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<DateTime>("TimePeriodStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalDiscount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalRevenue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalTax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Reports");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Review", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("Rating")
                         .IsRequired()
@@ -799,38 +823,41 @@ namespace WasmStore.Server.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.ShoppingCart", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.ShoppingCart", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("ShoppingCarts");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Tag", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Tag", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"), 1L, 1);
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -850,30 +877,32 @@ namespace WasmStore.Server.Data.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.UserAddress", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.UserAddress", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AddressType")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("UserAddresses");
                 });
@@ -929,15 +958,15 @@ namespace WasmStore.Server.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.CartItem", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.CartItem", b =>
                 {
-                    b.HasOne("WasmStore.Shared.Product", "Product")
+                    b.HasOne("WasmStore.Server.Models.Product", "Product")
                         .WithMany("CartItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WasmStore.Shared.ShoppingCart", "ShoppingCart")
+                    b.HasOne("WasmStore.Server.Models.ShoppingCart", "ShoppingCart")
                         .WithMany("CartItems")
                         .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -948,45 +977,52 @@ namespace WasmStore.Server.Data.Migrations
                     b.Navigation("ShoppingCart");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Favourite", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Favourite", b =>
                 {
-                    b.HasOne("WasmStore.Shared.AppUser", "AppUser")
+                    b.HasOne("WasmStore.Server.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Favourites")
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WasmStore.Shared.Product", "Product")
+                    b.HasOne("WasmStore.Server.Models.Product", "Product")
                         .WithMany("Favourites")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Order", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Image", b =>
                 {
-                    b.HasOne("WasmStore.Shared.AppUser", "AppUser")
+                    b.HasOne("WasmStore.Server.Models.Product", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("WasmStore.Server.Models.Order", b =>
+                {
+                    b.HasOne("WasmStore.Server.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Orders")
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.OrderItem", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.OrderItem", b =>
                 {
-                    b.HasOne("WasmStore.Shared.Order", "Order")
+                    b.HasOne("WasmStore.Server.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WasmStore.Shared.Product", "Product")
+                    b.HasOne("WasmStore.Server.Models.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -997,20 +1033,20 @@ namespace WasmStore.Server.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Payment", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Payment", b =>
                 {
-                    b.HasOne("WasmStore.Shared.Order", "Order")
+                    b.HasOne("WasmStore.Server.Models.Order", "Order")
                         .WithOne("Payment")
-                        .HasForeignKey("WasmStore.Shared.Payment", "OrderId")
+                        .HasForeignKey("WasmStore.Server.Models.Payment", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Product", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Product", b =>
                 {
-                    b.HasOne("WasmStore.Shared.Category", "Category")
+                    b.HasOne("WasmStore.Server.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1019,15 +1055,15 @@ namespace WasmStore.Server.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.ProductTag", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.ProductTag", b =>
                 {
-                    b.HasOne("WasmStore.Shared.Product", "Product")
+                    b.HasOne("WasmStore.Server.Models.Product", "Product")
                         .WithMany("ProductTags")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WasmStore.Shared.Tag", "Tag")
+                    b.HasOne("WasmStore.Server.Models.Tag", "Tag")
                         .WithMany("ProductTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1038,72 +1074,80 @@ namespace WasmStore.Server.Data.Migrations
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Report", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Report", b =>
                 {
-                    b.HasOne("WasmStore.Shared.AppUser", "AppUser")
+                    b.HasOne("WasmStore.Server.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Reports")
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.HasOne("WasmStore.Server.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Review", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Review", b =>
                 {
-                    b.HasOne("WasmStore.Shared.AppUser", "AppUser")
+                    b.HasOne("WasmStore.Server.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Reviews")
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WasmStore.Shared.Product", "Product")
+                    b.HasOne("WasmStore.Server.Models.Product", "Product")
                         .WithMany("Reviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.ShoppingCart", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("WasmStore.Shared.AppUser", "AppUser")
+                    b.HasOne("WasmStore.Server.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("ShoppingCarts")
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.UserAddress", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.UserAddress", b =>
                 {
-                    b.HasOne("WasmStore.Shared.Address", "Address")
+                    b.HasOne("WasmStore.Server.Models.Address", "Address")
                         .WithMany("UserAddresses")
                         .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WasmStore.Shared.AppUser", "AppUser")
+                    b.HasOne("WasmStore.Server.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("UserAddresses")
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Address");
 
-                    b.Navigation("AppUser");
+                    b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Address", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Address", b =>
                 {
                     b.Navigation("UserAddresses");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.AppUser", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Favourites");
 
@@ -1118,23 +1162,25 @@ namespace WasmStore.Server.Data.Migrations
                     b.Navigation("UserAddresses");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Category", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Category", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Order", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
 
                     b.Navigation("Payment");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Product", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Product", b =>
                 {
                     b.Navigation("CartItems");
 
                     b.Navigation("Favourites");
+
+                    b.Navigation("Images");
 
                     b.Navigation("OrderItems");
 
@@ -1143,12 +1189,12 @@ namespace WasmStore.Server.Data.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.ShoppingCart", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.ShoppingCart", b =>
                 {
                     b.Navigation("CartItems");
                 });
 
-            modelBuilder.Entity("WasmStore.Shared.Tag", b =>
+            modelBuilder.Entity("WasmStore.Server.Models.Tag", b =>
                 {
                     b.Navigation("ProductTags");
                 });
