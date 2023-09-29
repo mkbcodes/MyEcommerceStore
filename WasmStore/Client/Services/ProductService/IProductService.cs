@@ -1,4 +1,5 @@
-﻿using WasmStore.Shared;
+﻿using WasmStore.Shared.DTOs;
+using WasmStore.Shared.Models;
 
 namespace WasmStore.Client.Services.ProductService
 {
@@ -7,10 +8,13 @@ namespace WasmStore.Client.Services.ProductService
     /// </summary>
     public interface IProductService
     {
-        List<Product> Products { get; set; }
-        Product Product { get; set; }
-        Task GetProducts();
-        Task<ServiceResponse<Product>> GetProduct(int productId);
-        Task<ServiceResponse<Product>> PostProduct(Product product);
+        List<ProductDto> Products { get; set; }
+        ProductDto Product { get; set; }
+        Task GetAllProductsAsync();
+        Task<ServiceResponse<ProductDto>> GetProductByIdAsync(Guid productId);
+        Task<ServiceResponse<ProductDto>> PostProductAsync(ProductDto productDto, Stream imageFile);
+        Task<ServiceResponse<ProductDto>> CreateProductAsync(ProductDto product);
+        Task<ServiceResponse<ProductDto>> UpdateProductByIdAsync(ProductDto product);
+        Task<ServiceResponse<bool>> DeleteProductByIdAsync(Guid productId);
     }
 }

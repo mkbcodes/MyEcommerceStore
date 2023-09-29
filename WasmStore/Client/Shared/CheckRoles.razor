@@ -1,0 +1,39 @@
+﻿@using System.Security.Claims;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>Check Roles</h3>
+
+@code {
+    private List<string> roles = new List<string>();
+
+    private async Task CheckRolesAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CheckRolesAsync();
+    }
+}
+
+@if (roles.Contains("Admin"))
+{
+    <p>You are an admin. Here are your admin tools.</p>
+    <!-- Admin-specific content -->
+}
+else if (roles.Contains("User"))
+{
+    <p>Welcome, user!</p>
+    <!-- User-specific content -->
+}
+else
+{
+    <p>You do not have a role assigned.</p>
+}

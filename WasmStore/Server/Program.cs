@@ -11,7 +11,18 @@ using Microsoft.AspNetCore.ResponseCompression;
 using System.Data;
 using WasmStore.Server.Models;
 using WasmStore.Server.Services.SeedService;
-using AutoMapper; 
+using AutoMapper;
+using WasmStore.Server.Services.CategoryService;
+using Duende.IdentityServer.Services;
+using Microsoft.Extensions.Options;
+using WasmStore.Server.Services.AddressService;
+using WasmStore.Server.Services.FavouriteService;
+using WasmStore.Server.Services.CartService;
+using WasmStore.Server.Services.ReportService;
+using WasmStore.Server.Services.TagService;
+using WasmStore.Server.Services.OrderService;
+using WasmStore.Server.Services;
+
 public class Program
 {
     public static void Main(string[] args)
@@ -21,25 +32,38 @@ public class Program
         // Add services to the container.
         var connectionString = builder.Configuration.GetConnectionString("DevelopmentLocalConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString, options => options.CommandTimeout(120)));
+        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddSwaggerGen();
 
         // Tells DI every time that this interface is requested, it should create a new instance of the ProductService class but only once per instance and reused for the duration of a single client request
-        builder.Services.AddScoped<ISeedService, SeedService>();
-        builder.Services.AddScoped<IProductService, ProductService>();
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        builder.Services.AddScoped<ISeedService, SeedService>()
+        .AddScoped<IProductService, ProductService>()
+        .AddScoped<ICategoryService, CategoryService>()
+        .AddScoped<IAddressService, AddressService>()
+        .AddScoped<IFavouriteService, FavouriteService>()
+        .AddScoped<ICartService, CartService>()
+        .AddScoped<IReportService, ReportService>()
+        .AddScoped<ITagService, TagService>()
+        .AddScoped<IOrderService, OrderService>()
+        .AddScoped<IUserService, UserService>();
 
         builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
         { 
             // Password options
-            options.SignIn.RequireConfirmedAccount = true;
+            options.SignIn.RequireConfirmedAccount = false; // Development only.
         })
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
-        
+
+        builder.Services.AddTransient<IProfileService, CustomProfileService>();
+
         builder.Services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+            .AddProfileService<CustomProfileService>();
+
+
 
         builder.Services.AddAuthentication()
             .AddIdentityServerJwt();
@@ -53,23 +77,10 @@ public class Program
         // Configure the HTTP request pipeline for development only.
         if (app.Environment.IsDevelopment())
         {
+            app.UseDeveloperExceptionPage();
             app.UseMigrationsEndPoint();
             app.UseWebAssemblyDebugging();
             app.UseSwaggerUI();
-            // Initiates a code block where services can be retrieved from the app's dependency injection container.
-            using var scope = app.Services.CreateScope();
-
-            // Retrieves the seed service that implements ISeedService from the scoped services.
-            var seeder = scope.ServiceProvider.GetRequiredService<ISeedService>();
-
-            // Calls the seed method to add roles.
-            seeder.SeedRolesAsync().Wait();
-
-            // Calls the seed method to add default user and admin temporary accounts for development purposes.
-            seeder.SeedDefaultUsersAsync().Wait();
-
-            // Calls the seed method to add products.
-            //seeder.SeedPlaceholderProductDataAsync().Wait();
 
         }
         else
@@ -85,7 +96,9 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
+        // Identity Server Middleware exposes OpenID Connect (OIDC) endpoints.
         app.UseIdentityServer();
+        // Responsible for validating request credentials and setting the user on the request context.
         app.UseAuthentication();
         app.UseAuthorization();
         // Placeholer where my application was.
