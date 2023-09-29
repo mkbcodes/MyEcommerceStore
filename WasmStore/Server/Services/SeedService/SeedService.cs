@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using WasmStore.Server.Models;
+using WasmStore.Shared.Models;
 
 namespace WasmStore.Server.Services.SeedService
 { 
@@ -59,7 +60,6 @@ namespace WasmStore.Server.Services.SeedService
                     Name = "Woven Wall Hanging",
                     Description = "Elevate your living space with our ethereal Woven Wall Hanging in Macrame! Meticulously handcrafted by skilled artisans, this wall hanging is the epitome of bohemian elegance. Featuring intricate patterns and soft, earthy hues, our macrame wall hanging effortlessly adds texture and charm to any room. Made from 100% premium cotton, it's not just an art piece but a testament to craftsmanship and sustainability.",
                     Price = 9.99m,
-                    CategoryId = 1,
                     StockQuantity = 10
                 },
                 new Product
@@ -68,7 +68,6 @@ namespace WasmStore.Server.Services.SeedService
                     Name = "Vegetable Garden Marker",
                     Description = "Never confuse your basil with your parsley again with our delightful Vegetable Garden Markers! These charming ornaments are designed to bring both flair and functionality to your vegetable garden. Each marker features a beautifully crafted, weather-resistant design that not only labels your plants but also adds a whimsical touch to your garden.",
                     Price = 9.99m,
-                    CategoryId = 2, // Set the appropriate CategoryId
                     StockQuantity = 10
                 },
                 new Product
@@ -77,7 +76,6 @@ namespace WasmStore.Server.Services.SeedService
                     Name = "Wall Accent",
                     Description = "Add a dash of romance and elegance to your special day with our Wedding Wall Accent in Embroidery and Decorative elements. This exquisite wall art piece is a perfect backdrop for wedding photos or a focal point in the wedding venue. Created with intricate embroidery work and delicate decorative embellishments, this wall accent captures the essence of love and union in its design.",
                     Price = 9.99m,
-                    CategoryId = 2, // Set the appropriate CategoryId
                     StockQuantity = 10
                 }
             };

@@ -1,5 +1,9 @@
 ﻿@page "/"
-@attribute [AllowAnonymous]
+@using WasmStore.Client.Shared;
+@inject NavigationManager NavigationManager
+<PageTitle>Ecommerce Store - Home Page</PageTitle>
+<h2> Home Page</h2>
 
-<PageTitle>Ecommerce - Home Page</PageTitle>
+<h3> Visit the shop <a href="shop">here </a></h3>
 
+<CheckRoles></CheckRoles>

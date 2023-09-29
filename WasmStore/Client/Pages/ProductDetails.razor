@@ -1,5 +1,5 @@
-﻿@page "/product/{id:int}"
-@using WasmStore.Shared;
+﻿@attribute [Route(RouteConstants.ProductDetails)]
+@using WasmStore.Shared.DTOs;
 @inject IProductService ProductService;
 <h3>ProductDetails</h3>
 
@@ -8,6 +8,7 @@
     <span>Loading Product...</span>
 } else
 {
+    // Give the imageless DB entry a placeholder image.
     @if (product.Image != null)
     {
         var base64Image = Convert.ToBase64String(product.Image);
@@ -17,14 +18,12 @@
         <div class="media-img-wrapper me-2">
             <img class="media-img" src="@imageSrc" alt="@product.Name" />
             <div class="small-img-container">
-
                 <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 1" />
                 <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 2" />
                 <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 3" />
                 <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 2" />
                 <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 3" />
                 <img class="small-img" src="/images/img_placeholder.jpg" alt="Small Image 3" />
-                <!-- Add more small images here -->
             </div>
         </div>
         <div class="media-body">
@@ -33,6 +32,8 @@
             <h4 class="price">
                 $@product.Price
             </h4>
+            <h3>Delete Product</h3>
+            <button @onclick="DeleteProduct">Delete</button>
         </div>
     </div>
 }
@@ -40,24 +41,29 @@
 
 @code {
     string imageSrc = "/images/img_placeholder.jpg";
-    private Product? product = null;
-    public string message;
+    private ProductDto? product = null;
+    public string message = string.Empty;
 
     [Parameter]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
+    private async Task DeleteProduct()
+    {
+        var response = await ProductService.DeleteProductByIdAsync(Id);
+    }
 
     protected override async Task OnParametersSetAsync() {
         message = "Your Product Loading...";
-        var result = await ProductService.GetProduct(Id);
-        if(!result.Success)
-        {
-            message = result.Message;
-        }
-
-        else
+        var result = await ProductService.GetProductByIdAsync(Id);
+        if(result.Success)
         {
             product = result.Data;
         }
-
+        else
+        {
+            if (result.Message != null && result.Message != string.Empty)
+                message = result.Message;
+            else
+                message = "Error getting the error message.";
+        }
     }
 }

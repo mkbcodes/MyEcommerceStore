@@ -7,6 +7,7 @@ namespace WasmStore.Server.Services.SeedService
         Task SeedRolesAsync();
         Task SeedDefaultUsersAsync();
         Task SeedPlaceholderProductDataAsync();
+
     }
 
 }
