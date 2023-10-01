@@ -18,11 +18,12 @@ namespace WasmStore.Server.Controllers
             _cartService = cartService;
         }
 
+        // POST: api/cart/user/{userId}
         // POST: api/cart
         [HttpPost]
-        public async Task<IActionResult> CreateCart([FromBody] CartDto cartDto)
+        public async Task<IActionResult> CreateCartForUser([FromBody] CartDto cartDto, string userId)
         {
-            var response = await _cartService.CreateCartAsync(cartDto);
+            var response = await _cartService.CreateCartForUserAsync(cartDto, userId);
             return Ok(response);
         }
 
@@ -57,14 +58,7 @@ namespace WasmStore.Server.Controllers
             var response = await _cartService.DeleteCartByIdAsync(id);
             return Ok(response);
         }
-
-        // POST: api/cart/user/{userId}
-        [HttpPost("user/{userId}")]
-        public async Task<IActionResult> CreateCartForUser(string userId)
-        {
-            var response = await _cartService.CreateCartForUserAsync(userId);
-            return Ok(response);
-        }
+       
 
         // POST: api/cart/{cartId}/item
         [HttpPost("{cartId}/item")]

@@ -9,7 +9,7 @@ namespace WasmStore.Server.Services.CartService
             Task<ServiceResponse<CartDto>> GetCartByIdAsync(Guid cartId);
             Task<ServiceResponse<CartDto>> UpdateCartAsync(Guid cartId, CartDto cartDto);
             Task<ServiceResponse<bool>> DeleteCartByIdAsync(Guid cartId);
-            Task<ServiceResponse<CartDto>> CreateCartForUserAsync(string userId);
+            Task<ServiceResponse<CartDto>> CreateCartForUserAsync(CartDto cartDto, string userId);
             Task<ServiceResponse<CartItemDto>> AddItemToCartAsync(Guid cartId, CartItemDto cartItemDto);
             Task<ServiceResponse<bool>> RemoveItemFromCartAsync(Guid cartItemId);
     

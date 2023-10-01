@@ -18,7 +18,7 @@ namespace WasmStore.Server.Services.CartService
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<CartDto>> CreateCartForUserAsync(Guid userId)
+        public async Task<ServiceResponse<CartDto>> CreateCartForUserAsync(CartDto cartDto, string userId)
         {
             // Check if a cart already exists for the user
             var existingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
@@ -28,12 +28,12 @@ namespace WasmStore.Server.Services.CartService
             }
 
             // Create a new cart
-            var newCart = new ShoppingCart { UserId = userId };
+            var newCart = new ShoppingCart { ApplicationUserId = userId };
             await _context.ShoppingCarts.AddAsync(newCart);
             await _context.SaveChangesAsync();
 
-            var cartDto = _mapper.Map<CartDto>(newCart);
-            return new ServiceResponse<CartDto> { Data = cartDto, Message = "Cart created successfully." };
+            var backTocartDto = _mapper.Map<CartDto>(newCart);
+            return new ServiceResponse<CartDto> { Data = backTocartDto, Message = "Cart created successfully." };
         }
 
 
